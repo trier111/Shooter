@@ -19,6 +19,14 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void MoveForward(float Value);
+
+	void MoveRight(float Value);
+
+	void TurnAtRate(float Rate);
+
+	void LookUpAtRate(float Rate);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -28,12 +36,17 @@ public:
 
 private:
 	/* Camera boom positioning the camera behind the character */
-	UPROPERTY(VisibleAnywhere, Category = Camera, meta = (AllowPrivateAcces = "true"))
+	UPROPERTY(VisibleAnywhere, Category = Camera)
 	class USpringArmComponent* CameraBoom;
 
-	UPROPERTY(VisibleAnywhere, Category = Camera, meta = (AllowPrivateAcces = "true"))
+	UPROPERTY(VisibleAnywhere, Category = Camera)
 	class UCameraComponent* FollowCamera;
 
+	UPROPERTY(VisibleAnywhere, Category = Camera)
+	float BaseTurnRate;
+
+	UPROPERTY(VisibleAnywhere, Category = Camera)
+	float BaseLookUpRate;
 
 public:
 
