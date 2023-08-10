@@ -34,18 +34,18 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-private:
+public:
 	/* Camera boom positioning the camera behind the character */
-	UPROPERTY(VisibleAnywhere, Category = Camera)
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly , Category = Camera)
 	class USpringArmComponent* CameraBoom;
 
-	UPROPERTY(VisibleAnywhere, Category = Camera)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	class UCameraComponent* FollowCamera;
 
-	UPROPERTY(VisibleAnywhere, Category = Camera)
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, Category = Camera)
 	float BaseTurnRate;
 
-	UPROPERTY(VisibleAnywhere, Category = Camera)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float BaseLookUpRate;
 
 public:
