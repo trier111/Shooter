@@ -27,6 +27,8 @@ protected:
 
 	void LookUpAtRate(float Rate);
 
+	void FireWeapon();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -47,6 +49,21 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float BaseLookUpRate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Combat)
+	class USoundCue* FireSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Combat)
+	class UParticleSystem* MuzzleFlash;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Combat)
+	class UAnimMontage* HipFireMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Combat)
+	UParticleSystem* ImpactParticles;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Combat)
+	UParticleSystem* BeamParticles;
 
 public:
 
