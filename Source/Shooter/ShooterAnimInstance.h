@@ -37,4 +37,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement)
 	bool bIsAccelerating;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
+	float MovementOffsetYaw;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
+	float LastMovementOffsetYaw;
 };
