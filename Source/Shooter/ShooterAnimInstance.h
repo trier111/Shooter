@@ -7,43 +7,42 @@
 #include "ShooterAnimInstance.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class SHOOTER_API UShooterAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
-	
 public:
-
 	UFUNCTION(BlueprintCallable)
-	void UpdateAnimationProperties(float deltatime);
+		void UpdateAnimationProperties(float DeltaTime);
 
 	virtual void NativeInitializeAnimation() override;
 
-public:
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
+		class AShooterCharacter* ShooterCharacter;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement)
-	class AShooterCharacter* ShooterCharacter;
+	/** The speed of the character */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
+		float Speed;
 
-public:
+	/** Whether or not the character is in the air */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
+		bool bIsInAir;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement)
-	float Speed;
+	/** Whether or not the character is moving */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
+		bool bIsAccelerating;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement)
-	bool bIsInAir;
+	/** Offset yaw used for strafing */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement, meta = (AllowPrivateAccess = "true"))
+		float MovementOffsetYaw;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement)
-	bool bIsAccelerating;
+	/** Offset yaw the frame before we stopped moving */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement, meta = (AllowPrivateAccess = "true"))
+		float LastMovementOffsetYaw;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
-	float MovementOffsetYaw;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
-	float LastMovementOffsetYaw;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement)
-	bool bAiming;
-
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
+		bool bAiming;
 };
