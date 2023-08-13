@@ -30,4 +30,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Properties")
 		class UBoxComponent* CollisionBox;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Properties")
+	class UWidgetComponent* PickupWidget;
+
 };
