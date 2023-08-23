@@ -61,7 +61,8 @@ AShooterCharacter::AShooterCharacter() :
 	Starting9mmAmmo(85),
 	StartingARAmmo(120),
 	//Combat variables
-	CombatState(ECombatState::ECS_Unoccupied)
+	CombatState(ECombatState::ECS_Unoccupied),
+	bCrouching(false)
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -661,7 +662,7 @@ void AShooterCharacter::ReloadWeapon()
 		return;
 	}
 	//Do we have ammo of the correct type?
-	if (CarryingAmmo())
+	if (CarryingAmmo() && !EquippedWeapon->ClipIsFull())
 	{
 		CombatState = ECombatState::ECS_Reloading;
 		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
@@ -776,6 +777,9 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 	PlayerInputComponent->BindAction("ReloadButton", IE_Pressed, this,
 		&AShooterCharacter::ReloadButtonPressed);
+
+	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this,
+		&AShooterCharacter::CrouchButtonPressed);
 }
 
 void AShooterCharacter::GrabClip()
@@ -806,6 +810,14 @@ void AShooterCharacter::GrabClip()
 void AShooterCharacter::ReleaseClip()
 {
 	EquippedWeapon->SetMovingClip(false);
+}
+
+void AShooterCharacter::CrouchButtonPressed()
+{
+	if (!GetCharacterMovement()->IsFalling())
+	{
+		bCrouching = !bCrouching;
+	}
 }
 
 float AShooterCharacter::GetCrosshairSpreadMultiplier() const
