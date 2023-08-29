@@ -31,6 +31,15 @@ enum class EItemState : uint8
 	EIS_Max UMETA(DisplayName = "DefaultMAX")
 };
 
+UENUM(BlueprintType)
+enum class EItemType : uint8
+{
+	EIT_Ammo UMETA(DisplayName = "Ammo"),
+	EIT_Weapon UMETA(DisplayName = "Weapon"),
+
+	EIT_MAX UMETA(DisplayName = "DefaultMAX")
+};
+
 UCLASS()
 class SHOOTER_API AItem : public AActor
 {
@@ -64,7 +73,7 @@ protected:
 	void SetActiveStars();
 
 	/*Sets properties of the item's components based on State*/
-	void SetItemProperties(EItemState State);
+	virtual void SetItemProperties(EItemState State);
 
 	/*Called when ItemInterpTimer is finished*/
 	void FinishInterping();
@@ -72,9 +81,17 @@ protected:
 	/*Handles item interpolation when in the EquipInterping state*/
 	void ItemInterp(float DeltaTime);
 
+	//Get interp location based on the item type
+	FVector GetInterpLocation();
+
+	void PlayPickupSound();
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	//called in AShooterCharacter::GetPickupItem
+	void PlayEquipSound();
 
 private:
 	/** Skeletal Mesh for the item */
@@ -155,7 +172,15 @@ private:
 
 	//Sound played when the Item is equipped
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	USoundCue* EqipSound;
+	USoundCue* EquipSound;
+
+	//Enum for the type of item this item is
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
+	EItemType ItemType;
+
+	//Index of interp location this item is interping to
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
+	int32 InterpLocIndex;
 
 public:
 	FORCEINLINE UWidgetComponent* GetPickupWidget() const { return PickupWidget; }
@@ -165,7 +190,8 @@ public:
 	void SetItemState(EItemState State);
 	FORCEINLINE USkeletalMeshComponent* GetItemMesh() const { return ItemMesh; }
 	FORCEINLINE USoundCue* GetPickUpSound() const { return PickUpSound; }
-	FORCEINLINE USoundCue* GetEqipSound() const { return EqipSound; }
+	FORCEINLINE USoundCue* GetEqipSound() const { return EquipSound; }
+	FORCEINLINE int32 GetItemCount() const { return ItemCount; }
 
 	/*Called from the AShooterCharacter class*/
 	void StartItemCurve(AShooterCharacter* Char);
