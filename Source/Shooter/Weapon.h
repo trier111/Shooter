@@ -72,6 +72,21 @@ struct FWeaponDataTable : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UTexture2D* CrosshairsTop;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float AutoFireRate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UParticleSystem* MuzzleFlash;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USoundCue* FireSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName BoneToHide;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bAutomatic;
 };
 
 /**
@@ -93,6 +108,12 @@ protected:
 	void StopFalling();
 
 	virtual void OnConstruction(const FTransform& Transform) override;
+
+	virtual void BeginPlay() override;
+
+	void FinishMovingSlide();
+
+	void UpdateSlideDisplacement();
 
 private:
 
@@ -150,6 +171,57 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = DataTable, meta = (AllowPrivateAccess = "true"))
 	UTexture2D* CrosshairsTop;
 
+	//Automatic fire speed
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = DataTable, meta = (AllowPrivateAccess = "true"))
+	float AutoFireRate;
+
+	//particle system spawned at barrelSocket
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = DataTable, meta = (AllowPrivateAccess = "true"))
+	class UParticleSystem* MuzzleFlash;
+
+	//Sound played when the weapon is fired
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = DataTable, meta = (AllowPrivateAccess = "true"))
+	USoundCue* FireSound;
+
+	//Name of the bone to hide on the weapon mesh
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = DataTable, meta = (AllowPrivateAccess = "true"))
+	FName BoneToHide;
+
+	//Amount that the slide is pushed back during pistol fire
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Pistol, meta = (AllowPrivateAccess = "true"))
+	float SlideDisplacement;
+
+	//Curve for the Slide Displacement
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pistol, meta = (AllowPrivateAccess = "true"))
+	UCurveFloat* SlideDisplacementCurve;
+
+	//Timer handle for updating SlideDisplacement
+	FTimerHandle SlideTimer;
+
+	//Time for displacing the slide during pistol fire
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pistol, meta = (AllowPrivateAccess = "true"))
+	float SlideDisplacementTime;
+
+	//True when moving the pistol slide
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Pistol, meta = (AllowPrivateAccess = "true"))
+	bool bMovingSlide;
+
+	//Max distance for the slide on the pistol 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pistol, meta = (AllowPrivateAccess = "true"))
+	float MaxSlideDisplacement;
+
+	//mzx rotation for pistol recoil
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pistol, meta = (AllowPrivateAccess = "true"))
+	float MaxRecoilRotation;
+
+	//Amount that the pistol will rotate during pistol fire
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Pistol, meta = (AllowPrivateAccess = "true"))
+	float RecoilRotation;
+
+	//True for auto gunfire
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Properties", meta = (AllowPrivateAccess = "true"))
+	bool bAutomatic;
+
 public:
 
 	/*Adds an impulse to the weapon*/
@@ -166,6 +238,12 @@ public:
 	FORCEINLINE void SetReloadMontageSection(FName Name) { ReloadMontageSection = Name; }
 	FORCEINLINE FName GetClipBoneName() const { return ClipBoneName; }
 	FORCEINLINE void SetClipBoneName(FName Name) { ClipBoneName = Name; }
+	FORCEINLINE float GetAutoFireRate() const { return AutoFireRate; }
+	FORCEINLINE UParticleSystem* GetMuzzleFlash() const { return MuzzleFlash; }
+	FORCEINLINE USoundCue* GetFireSound() const { return FireSound; }
+	FORCEINLINE bool GetAutomatic() const { return bAutomatic; }
+
+	void StartSlideTimer();
 
 	void ReloadAmmo(int32 Amount);
 
