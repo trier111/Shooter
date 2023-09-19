@@ -31,7 +31,7 @@ public:
 	UShooterAnimInstance();
 
 	UFUNCTION(BlueprintCallable)
-		void UpdateAnimationProperties(float DeltaTime);
+	void UpdateAnimationProperties(float DeltaTime);
 
 	virtual void NativeInitializeAnimation() override;
 
